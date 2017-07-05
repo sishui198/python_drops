@@ -15,7 +15,7 @@ class search_github:
         self.results = ""
         self.totalresults = ""
         self.server = "github.com"
-        self.limit = int(limit)
+        self.limit = int(limit)/10
         self.counter = 1 #页码
         self.headers = {"User-Agent":useragent}
         self.proxies = proxy
@@ -23,7 +23,8 @@ class search_github:
     def do_search(self):
         try:
             #https://github.com/search?p=2&q=api.map.baidu.com%2Fhighacciploc%2Fv1&type=Code&utf8=%E2%9C%93
-            url = "http://{0}/search?p={1}&q={2}&type=Code&utf8=%E2%9C%93".format(self.server,self.counter,self.word)# 这里的pn参数是条目数
+            url = "https://{0}/search?p={1}&q={2}&type=Code&utf8=%E2%9C%93".format(self.server,self.counter,self.word)# 这里的pn参数是条目数
+            print url
         except Exception, e:
             print e
         try:
@@ -45,7 +46,7 @@ class search_github:
         return links.findall(self.totalresults)  # list
 
     def process(self):
-        while (self.counter < self.limit and self.check_next()):
+        while (self.counter < self.limit):#and self.check_next()
             self.do_search()
             #self.do_search_vhost()
             time.sleep(1)
@@ -61,7 +62,8 @@ if __name__ == "__main__":
         print "[-] Searching in github:"
         useragent = "(Mozilla/5.0 (Windows; U; Windows NT 6.0;en-US; rv:1.9.2) Gecko/20100115 Firefox/3.6"
         keyword = raw_input("search what:")
-        search = search_github(keyword, 1000, useragent)
+        proxy = {"https": "https://127.0.0.1:8080"}
+        search = search_github(keyword, 1000, useragent,proxy)
         search.process()
         all_links = search.findkeys()
         print all_links
