@@ -28,7 +28,7 @@ class search_github:
         except Exception, e:
             print e
         try:
-            r = requests.get(url, headers = self.headers, proxies = self.proxies)
+            r = requests.get(url, headers = self.headers, proxies = self.proxies,verify=False)
             self.results = r.content
             self.totalresults += self.results
         except Exception,e:
@@ -63,7 +63,7 @@ if __name__ == "__main__":
         useragent = "(Mozilla/5.0 (Windows; U; Windows NT 6.0;en-US; rv:1.9.2) Gecko/20100115 Firefox/3.6"
         keyword = raw_input("search what:")
         proxy = {"https": "https://127.0.0.1:8080"}
-        search = search_github(keyword, 1000, useragent,proxy)
+        search = search_github(keyword, 100, useragent,proxy)
         search.process()
         all_links = search.findkeys()
         print all_links
