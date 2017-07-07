@@ -7,8 +7,9 @@ import re
 import time
 import requests
 
-class search_github:
+#https://developer.github.com/v3/search/#search-repositories
 
+class search_github:
 
     def __init__(self, word, limit, useragent, proxy=None):
         self.engine_name = "Github"
