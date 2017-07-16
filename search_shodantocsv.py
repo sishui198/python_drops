@@ -45,14 +45,7 @@ try:
                 #result是一个字典。
                 print '#######################\n'
                 resultlist = tuple([result['ip_str'],result['port']])
-                url = 'http://'+result['ip_str']+":"+str(result['port'])+'/index.php?cperpage=1'
-                try:
-                    response = urllib.urlopen(url)
-                    if response.code == 200 and 'WordPress' in response.read():
-                        print url
-                    #print resultlist
-                except Exception:
-                    pass
+                print resultlist
                 writer.writerow(resultlist)
 except shodan.APIError, e:
         print 'Error: %s' % e

@@ -50,10 +50,13 @@ def usecookie():
     url = raw_input("Please Input URL Or Query Key Words:")
     if url.startswith("https://fofa.so/result?"):
         #https://fofa.so/result?q=domain%3Dwolaidai.com&qbase64=ZG9tYWluPXdvbGFpZGFpLmNvbQ%3D%3D
-        pass
+        url.replace(" ","")
     else:
-        url = "https://fofa.so/result?q={0}&qbase64={1}".format(url,base64.b64encode(url))
-
+        qbase64 =base64.b64encode(url)
+        url = urllib.quote(url)
+        #keywords = urllib.urlencode(url)
+        url = "https://fofa.so/result?q={0}&qbase64={1}".format(url,qbase64)
+    oriurl = url
     cookie = raw_input("Please Input cookie:")
     if "_fofapro_ars_session=" in cookie:
         pass
@@ -61,9 +64,9 @@ def usecookie():
         cookie = "_fofapro_ars_session="+cookie
     print cookie
     li = range(1,30)
-    random.shuffle(li)#to use page number not in order可以尝试乱序，看看能不能绕过频繁请求的检测
+    #random.shuffle(li)#to use page number not in order可以尝试乱序，看看能不能绕过频繁请求的检测,但当小于30的时候，会请求无效页码
     for i in li:
-        url = url.replace(" ","")+'&page='+str(i)
+        url = oriurl+'&page='+str(i)
         #print url
         request = urllib2.Request(url)
         request.add_header('Cookie', cookie)
@@ -73,11 +76,11 @@ def usecookie():
         urllist = findLinks(html)
         for item in urllist:
             print item
-        if "next_page" in html:
-            time.sleep(random.randint(3,10))
-            continue
-        else:
+        if "next_page disabled" in html:
             break
+        else:
+            time.sleep(random.randint(5, 10))
+            continue
 
 def findLinks(htmlString):
     links = re.compile("<a target=\"_blank\" href=\"(.+?)\"")
